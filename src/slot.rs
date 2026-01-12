@@ -22,7 +22,7 @@ pub struct Slot<T> {
 }
 
 // SAFETY: Slot<T> is Sync because:
-// 1. The state machine (Free → Claimed → Published → Sequenced) ensures exclusive access
+// 1. The state machine (Free -> Claimed -> Published -> Sequenced) ensures exclusive access
 // 2. Only the thread that transitions to Claimed can write to producer_id, timestamp, payload
 // 3. Atomic operations with proper ordering (Acquire/Release) synchronize access
 // 4. Once Published/Sequenced, fields are read-only until recycled to Free
