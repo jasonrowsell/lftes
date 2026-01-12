@@ -1,4 +1,7 @@
+use crate::consumer::Consumer;
 use crate::error::BuildError;
+use crate::producer::Producer;
+use crate::sequencer::{start_sequencer, SequencerHandle};
 use crate::slot::Slot;
 use std::sync::atomic::{AtomicU64, AtomicUsize};
 use std::sync::Arc;
@@ -45,6 +48,22 @@ where
             head: AtomicUsize::new(0),
             tail: AtomicU64::new(0),
         })
+    }
+
+    /// Start the sequencer thread
+    pub fn start(self: &Arc<Self>) -> SequencerHandle {
+        start_sequencer(self.clone())
+    }
+
+    /// Create a new producer handle
+    pub fn producer(self: &Arc<Self>) -> Producer<T> {
+        // TODO: Track producer IDs
+        Producer::new(self.clone(), 0)
+    }
+
+    /// Create a new consumer handle
+    pub fn consumer(self: &Arc<Self>) -> Consumer<T> {
+        Consumer::new(self.clone())
     }
 
     #[cfg(test)]
