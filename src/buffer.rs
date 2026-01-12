@@ -19,7 +19,8 @@ pub struct Buffer<T> {
     pub(crate) capacity: usize,
     pub(crate) mask: usize,
     pub(crate) head: AtomicUsize,
-    pub(crate) tail: AtomicU64,
+    #[allow(dead_code)]
+    pub(crate) tail: AtomicU64, // TODO: track min consumer position for slot recycling
 }
 
 impl<T> Buffer<T>
@@ -64,6 +65,11 @@ where
     /// Create a new consumer handle
     pub fn consumer(self: &Arc<Self>) -> Consumer<T> {
         Consumer::new(self.clone())
+    }
+
+    /// Get the buffer capacity
+    pub fn capacity(&self) -> usize {
+        self.capacity
     }
 
     #[cfg(test)]
