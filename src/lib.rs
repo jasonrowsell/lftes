@@ -1,14 +1,13 @@
-pub fn add(left: u64, right: u64) -> u64 {
-    left + right
-}
+mod buffer;
+mod consumer;
+mod error;
+mod producer;
+mod sequencer;
+mod slot;
 
-#[cfg(test)]
-mod tests {
-    use super::*;
-
-    #[test]
-    fn it_works() {
-        let result = add(2, 2);
-        assert_eq!(result, 4);
-    }
-}
+// Public re-exports
+pub use buffer::{Buffer, BufferBuilder};
+pub use consumer::{Consumer, Event};
+pub use error::{BuildError, PushError};
+pub use producer::Producer;
+pub use sequencer::SequencerHandle;
